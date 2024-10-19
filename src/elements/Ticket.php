@@ -17,6 +17,7 @@ use craft\helpers\DateTimeHelper;
 use craft\helpers\Html;
 use craft\helpers\StringHelper;
 
+use craft\commerce\Plugin as Commerce;
 use craft\commerce\base\Purchasable;
 use craft\commerce\behaviors\CurrencyAttributeBehavior;
 use craft\commerce\elements\Order;
@@ -179,6 +180,7 @@ class Ticket extends Purchasable
 
         $behaviors['currencyAttributes'] = [
             'class' => CurrencyAttributeBehavior::class,
+            'defaultCurrency' => Commerce::getInstance()->getPaymentCurrencies()->getPrimaryPaymentCurrencyIso(),
             'currencyAttributes' => $this->currencyAttributes(),
         ];
 

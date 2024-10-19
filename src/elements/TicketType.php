@@ -267,12 +267,16 @@ class TicketType extends Element implements NestedElementInterface
 
         $behaviors['currencyAttributes'] = [
             'class' => CurrencyAttributeBehavior::class,
-            'currencyAttributes' => [
-                'price',
-            ],
+            'defaultCurrency' => Commerce::getInstance()->getPaymentCurrencies()->getPrimaryPaymentCurrencyIso(),
+            'currencyAttributes' => $this->currencyAttributes(),
         ];
 
         return $behaviors;
+    }
+
+    public function currencyAttributes(): array
+    {
+        return ['price'];
     }
 
     public function setPrice(Money|array|float|int|null $price): void
