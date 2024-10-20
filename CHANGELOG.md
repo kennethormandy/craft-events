@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0-beta.6 - 2024-10-20
+
+### Fixed
+- Fix an error when editing Ticket Types.
+
 ## 3.0.0-beta.5 - 2024-10-11
 
 ### Fixed
