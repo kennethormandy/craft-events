@@ -81,6 +81,34 @@ class TicketType extends Element implements NestedElementInterface
         return ['eventsEventTypes.' . $context->uid];
     }
 
+    public static function eagerLoadingMap(array $sourceElements, string $handle): array|null|false
+    {
+        if ($handle == 'event') {
+            // Get the source element IDs
+            $sourceElementIds = [];
+
+            foreach ($sourceElements as $sourceElement) {
+                $sourceElementIds[] = $sourceElement->id;
+            }
+
+            $map = (new Query())
+                ->select('id as source, primaryOwnerId as target')
+                ->from('{{%events_ticket_types}}')
+                ->where(['in', 'id', $sourceElementIds])
+                ->all();
+
+            return [
+                'elementType' => Event::class,
+                'map' => $map,
+                'criteria' => [
+                    'status' => null,
+                ],
+            ];
+        }
+
+        return self::traitEagerLoadingMap($sourceElements, $handle);
+    }
+
     protected static function defineFieldLayouts(?string $source): array
     {
         // Being attached to an event element means we always have context, so improve performance
@@ -274,6 +302,22 @@ class TicketType extends Element implements NestedElementInterface
         return $behaviors;
     }
 
+    public function safeAttributes()
+    {
+        $attributes = parent::safeAttributes();
+        $attributes[] = 'eventId';
+
+        return $attributes;
+    }
+
+    public function attributes(): array
+    {
+        $attributes = parent::attributes();
+        $attributes[] = 'event';
+
+        return $attributes;
+    }
+
     public function currencyAttributes(): array
     {
         return ['price'];
@@ -368,6 +412,16 @@ class TicketType extends Element implements NestedElementInterface
         $this->traitSetOwner($owner);
     }
 
+    public function getEvent(): ?Event
+    {
+        return $this->getOwner();
+    }
+
+    public function setEvent(Event $event): void
+    {
+        $this->setOwner($event);
+    }
+
     public function setEventSlug(?string $eventSlug): void
     {
         $this->_eventSlug = $eventSlug;
@@ -435,6 +489,8 @@ class TicketType extends Element implements NestedElementInterface
 
     public function afterSave(bool $isNew): void
     {
+        $ownerId = $this->getOwnerId();
+
         if (!$this->propagating) {
             if (!$isNew) {
                 $record = TicketTypeRecord::findOne($this->id);
@@ -478,20 +534,34 @@ class TicketType extends Element implements NestedElementInterface
 
             $this->id = $record->id;
 
-            $ownerId = $this->getOwnerId();
-
             if ($ownerId && $this->saveOwnership) {
-                if (!isset($this->sortOrder) && !$isNew) {
-                    // todo: update based on Entry::afterSave() if we add draft support
-                    // (see https://github.com/craftcms/cms/pull/14497)
-                    $this->sortOrder = (new Query())
-                        ->select('sortOrder')
-                        ->from(Table::ELEMENTS_OWNERS)
-                        ->where([
-                            'elementId' => $this->id,
-                            'ownerId' => $ownerId,
-                        ])
-                        ->scalar() ?: null;
+                if (!isset($this->sortOrder) && (!$isNew || $this->duplicateOf)) {
+                    // figure out if we should proceed this way
+                    // if we're dealing with an element that's being duplicated, and it has a draftId
+                    // it means we're creating a draft of something
+                    // if we're duplicating element via duplicate action - draftId would be empty
+                    // Same as https://github.com/craftcms/cms/pull/14497/files
+                    $elementId = null;
+
+                    if ($this->duplicateOf) {
+                        if ($this->draftId) {
+                            $elementId = $this->duplicateOf->id;
+                        }
+                    } else {
+                        // if we're not duplicating - use element's id
+                        $elementId = $this->id;
+                    }
+
+                    if ($elementId) {
+                        $this->sortOrder = (new Query())
+                            ->select('sortOrder')
+                            ->from(Table::ELEMENTS_OWNERS)
+                            ->where([
+                                'elementId' => $elementId,
+                                'ownerId' => $ownerId,
+                            ])
+                            ->scalar() ?: null;
+                    }
                 }
 
                 if (!isset($this->sortOrder)) {
@@ -635,13 +705,6 @@ class TicketType extends Element implements NestedElementInterface
         }
 
         return parent::inlineAttributeInputHtml($attribute);
-    }
-
-    protected function cacheTags(): array
-    {
-        return [
-            "event:$this->primaryOwnerId",
-        ];
     }
 
     protected function cpEditUrl(): ?string

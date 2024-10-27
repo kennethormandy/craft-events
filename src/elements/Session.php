@@ -93,6 +93,34 @@ class Session extends Element implements NestedElementInterface
         return ['eventsEventTypes.' . $context->uid];
     }
 
+    public static function eagerLoadingMap(array $sourceElements, string $handle): array|null|false
+    {
+        if ($handle == 'event') {
+            // Get the source element IDs
+            $sourceElementIds = [];
+
+            foreach ($sourceElements as $sourceElement) {
+                $sourceElementIds[] = $sourceElement->id;
+            }
+
+            $map = (new Query())
+                ->select('id as source, primaryOwnerId as target')
+                ->from('{{%events_sessions}}')
+                ->where(['in', 'id', $sourceElementIds])
+                ->all();
+
+            return [
+                'elementType' => Event::class,
+                'map' => $map,
+                'criteria' => [
+                    'status' => null,
+                ],
+            ];
+        }
+
+        return self::traitEagerLoadingMap($sourceElements, $handle);
+    }
+
     protected static function defineFieldLayouts(?string $source): array
     {
         // Being attached to an event element means we always have context, so improve performance
@@ -284,6 +312,22 @@ class Session extends Element implements NestedElementInterface
         return $this->canSave($user);
     }
 
+    public function safeAttributes()
+    {
+        $attributes = parent::safeAttributes();
+        $attributes[] = 'eventId';
+
+        return $attributes;
+    }
+
+    public function attributes(): array
+    {
+        $attributes = parent::attributes();
+        $attributes[] = 'event';
+
+        return $attributes;
+    }
+
     public function setAttributesFromRequest(array $values): void
     {
         if (array_key_exists('frequencyData', $values)) {
@@ -368,6 +412,16 @@ class Session extends Element implements NestedElementInterface
         $this->fieldLayoutId = $owner->getType()->sessionFieldLayoutId;
 
         $this->traitSetOwner($owner);
+    }
+
+    public function getEvent(): ?Event
+    {
+        return $this->getOwner();
+    }
+
+    public function setEvent(Event $event): void
+    {
+        $this->setOwner($event);
     }
 
     public function setEventSlug(?string $eventSlug): void
@@ -855,13 +909,6 @@ class Session extends Element implements NestedElementInterface
         ]);
 
         return $items;
-    }
-
-    protected function cacheTags(): array
-    {
-        return [
-            "event:$this->primaryOwnerId",
-        ];
     }
 
     protected function cpEditUrl(): ?string

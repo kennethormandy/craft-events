@@ -641,7 +641,7 @@ class Event extends Element
             $this->_sessions = self::createSessionQuery($this)->status(null)->collect();
         }
 
-        return $this->_sessions->filter(fn(Session $session) => $includeDisabled || $session->enabled);
+        return $this->_sessions->filter(fn(Session $session) => $includeDisabled || ($session->getStatus() === self::STATUS_ENABLED));
     }
 
     public function setSessions(SessionCollection|SessionQuery|array $sessions): void
@@ -677,7 +677,7 @@ class Event extends Element
             $this->_ticketTypes = self::createTicketTypeQuery($this)->status(null)->collect();
         }
 
-        return $this->_ticketTypes->filter(fn(TicketType $ticketType) => $includeDisabled || $ticketType->enabled);
+        return $this->_ticketTypes->filter(fn(TicketType $ticketType) => $includeDisabled || ($ticketType->getStatus() === self::STATUS_ENABLED));
     }
 
     public function setTicketTypes(TicketTypeCollection|TicketTypeQuery|array $ticketTypes): void
@@ -696,7 +696,7 @@ class Event extends Element
             $this->_ticketTypeManager = new NestedElementManager(TicketType::class, fn(Event $event) => self::createTicketTypeQuery($event), [
                 'attribute' => 'ticketTypes',
                 'propagationMethod' => PropagationMethod::All,
-                'valueGetter' => fn() => $this->getTicketTypes(true),
+                'valueGetter' => fn(Event $event) => $event->getTicketTypes(true),
             ]);
         }
 
@@ -713,7 +713,7 @@ class Event extends Element
             $this->_tickets = self::createTicketQuery($this)->status(null)->collect();
         }
 
-        return $this->_tickets->filter(fn(Ticket $ticket) => $includeDisabled || $ticket->enabled);
+        return $this->_tickets->filter(fn(Ticket $ticket) => $includeDisabled || ($ticket->getStatus() === self::STATUS_ENABLED));
     }
 
     public function setTickets(TicketCollection|TicketQuery|array $tickets): void
@@ -732,7 +732,7 @@ class Event extends Element
             $this->_ticketManager = new NestedElementManager(Ticket::class, fn(Event $event) => self::createTicketQuery($event), [
                 'attribute' => 'tickets',
                 'propagationMethod' => PropagationMethod::All,
-                'valueGetter' => fn() => $this->getTickets(true),
+                'valueGetter' => fn(Event $event) => $event->getTickets(true),
                 'ownerIdParam' => 'eventId',
                 'primaryOwnerIdParam' => 'eventId',
             ]);

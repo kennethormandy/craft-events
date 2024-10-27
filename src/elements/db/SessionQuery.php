@@ -29,6 +29,8 @@ class SessionQuery extends ElementQuery
 
     protected array $defaultOrderBy = ['events_sessions.dateCreated' => SORT_ASC];
 
+    private ?ElementInterface $_owner = null;
+
 
     // Public Methods
     // =========================================================================
@@ -71,6 +73,9 @@ class SessionQuery extends ElementQuery
         } else {
             $this->ownerId = $value;
         }
+
+        $this->_owner = $owner;
+
         return $this;
     }
 
@@ -99,6 +104,7 @@ class SessionQuery extends ElementQuery
     public function ownerId(mixed $value): static
     {
         $this->ownerId = $value;
+        $this->_owner = null;
         return $this;
     }
 
@@ -131,12 +137,25 @@ class SessionQuery extends ElementQuery
         return SessionCollection::make(parent::collect($db));
     }
 
+    public function createElement(array $row): ElementInterface
+    {
+        if (isset($this->_owner)) {
+            $row['owner'] = $this->_owner;
+        }
 
-    // // Protected Methods
-    // // =========================================================================
+        return parent::createElement($row);
+    }
+
+
+    // Protected Methods
+    // =========================================================================
 
     protected function beforePrepare(): bool
     {
+        if (!parent::beforePrepare()) {
+            return false;
+        }
+
         try {
             $this->primaryOwnerId = $this->_normalizeOwnerId($this->primaryOwnerId);
         } catch (InvalidArgumentException) {
@@ -215,16 +234,22 @@ class SessionQuery extends ElementQuery
 
         $this->_applyHasEventParam();
 
-        return parent::beforePrepare();
+        return true;
     }
 
     protected function cacheTags(): array
     {
         $tags = [];
 
+        if ($this->primaryOwnerId) {
+            foreach ($this->primaryOwnerId as $ownerId) {
+                $tags[] = "element::$ownerId";
+            }
+        }
+
         if ($this->ownerId) {
             foreach ($this->ownerId as $ownerId) {
-                $tags[] = "event:$ownerId";
+                $tags[] = "element::$ownerId";
             }
         }
 
