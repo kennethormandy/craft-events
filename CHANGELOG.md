@@ -1,30 +1,6 @@
 # Changelog
 
-## 3.0.0-beta.6 - 2024-10-20
-
-### Fixed
-- Fix an error when editing Ticket Types.
-
-## 3.0.0-beta.5 - 2024-10-11
-
-### Fixed
-- Fix an error when migrating from `3.0.0-beta.2`.
-- Fix “All Day” lightswitch not working.
-
-## 3.0.0-beta.4 - 2024-10-06
-
-### Added
-- Add the ability to set a “Seats per Ticket” setting for tickets.
-- Add `Purchased` and `Available` columns for Ticket elements.
-
-### Changed
-- Deleting a Ticket element is now prevented if any purchased tickets exist.
-
-### Fixed
-- Handle Ticket elements missing their event, session or type.
-- Fix ticket status pane not appearing when still tickets on an event (bit missing either sessions or ticket types).
-
-## 3.0.0-beta.3 - 2024-10-04
+## 3.0.0 - 2024-10-31
 > {warning} This release introduces Sessions and re-purposed Ticket Types. As such, it's a major architectural change to how you structure events, which should be largely intuitive. All your existing events and tickets will be migrated. Read through the changes [here](https://github.com/verbb/events/blob/craft-5/docs/get-started/upgrading-from-v2.md).
 
 ### Added
@@ -44,8 +20,12 @@
 - Add Events element conditions.
 - Add Purchased Ticket element conditions.
 - Add Promotable field to Ticket Types to control whether tickets should be promotable.
+- Add the ability to set a “Seats per Ticket” setting for tickets.
+- Add `Purchased` and `Available` columns for Ticket elements.
 
 ### Changed
+- Now requires PHP `8.2.0+`.
+- Now requires Craft `5.0.0+`.
 - Events now no longer house the start/end dates for an event. These are managed in a Session.
 - Ticket Types are now defined in your Event, and have been re-puposed to be more powerful. This replaces what was Tickets in Events 2.x, and is where you define your pricing and capacity.
 - Tickets are now automatically generated for every event, based on the Event Sessions and Ticket Types. Previously, you defined the tickets themselves.
@@ -56,20 +36,7 @@
 - Updated the look and content of the check in template.
 - Revamp permissions, include event/session/ticket type view/create/edit/delete permissions.
 - Event element cards now show the event type and start/end date/times of events
-
-### Fixed
-- Fix tickets not being promotable.
-
-## 3.0.0-beta.2 - 2024-03-18
-
-### Fixed
-- Fix `getIsApplyingYamlChanges()`.
-
-## 3.0.0-beta.1 - 2024-03-04
-
-### Changed
-- Now requires PHP `8.2.0+`.
-- Now requires Craft `5.0.0+`.
+- Deleting a Ticket element is now prevented if any purchased tickets exist.
 
 ## 2.0.5 - 2024-03-04
 
