@@ -478,11 +478,11 @@ class TicketType extends Element implements NestedElementInterface
 
     public function beforeSave(bool $isNew): bool
     {
-        $event = $this->getOwner();
-
         // Set the field layout
-        $eventType = $event->getType();
-        $this->fieldLayoutId = $eventType->ticketTypeFieldLayoutId;
+        if ($event = $this->getOwner()) {
+            $eventType = $event->getType();
+            $this->fieldLayoutId = $eventType->ticketTypeFieldLayoutId;
+        }
 
         return parent::beforeSave($isNew);
     }

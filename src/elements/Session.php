@@ -377,8 +377,10 @@ class Session extends Element implements NestedElementInterface
         $fieldLayout = parent::getFieldLayout();
 
         if (!$fieldLayout && $this->getOwnerId()) {
-            $fieldLayout = $this->getOwner()->getType()->getSessionFieldLayout();
-            $this->fieldLayoutId = $fieldLayout->id;
+            if ($event = $this->getOwner()) {
+                $fieldLayout = $event->getType()->getSessionFieldLayout();
+                $this->fieldLayoutId = $fieldLayout->id;
+            }
         }
 
         return $fieldLayout;
@@ -604,11 +606,11 @@ class Session extends Element implements NestedElementInterface
 
     public function beforeSave(bool $isNew): bool
     {
-        $event = $this->getOwner();
-
         // Set the field layout
-        $eventType = $event->getType();
-        $this->fieldLayoutId = $eventType->sessionFieldLayoutId;
+        if ($event = $this->getOwner()) {
+            $eventType = $event->getType();
+            $this->fieldLayoutId = $eventType->sessionFieldLayoutId;
+        }
 
         return parent::beforeSave($isNew);
     }
