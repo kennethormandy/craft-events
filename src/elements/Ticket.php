@@ -261,6 +261,11 @@ class Ticket extends Purchasable
         return $this->getType()?->price ?? null;
     }
 
+    public function getPrice(): ?float
+    {
+        return $this->getBasePrice();
+    }
+
     public function getStock(): int
     {
         // Available to purchase is capacity (event or ticket) - purchased tickets
