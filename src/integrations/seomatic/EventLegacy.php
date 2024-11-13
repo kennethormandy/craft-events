@@ -21,7 +21,7 @@ use nystudio107\seomatic\models\MetaBundle;
 use yii\base\Event as YiiEvent;
 use Exception;
 
-class Event implements SeoElementInterface
+class EventLegacy implements SeoElementInterface
 {
     // Constants
     // =========================================================================
@@ -123,7 +123,7 @@ class Event implements SeoElementInterface
             ->one();
     }
 
-    public static function previewUri(string $sourceHandle, $siteId, $typeId = null): ?string
+    public static function previewUri(string $sourceHandle, $siteId)
     {
         $uri = null;
 
@@ -139,7 +139,7 @@ class Event implements SeoElementInterface
         return $uri;
     }
 
-    public static function fieldLayouts(string $sourceHandle, $typeId = null): array
+    public static function fieldLayouts(string $sourceHandle): array
     {
         $layouts = [];
         $events = EventsPlugin::getInstance();
