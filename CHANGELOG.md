@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.1 - 2024-11-13
+
+### Fixed
+- Fix an Events 2 migration error for sessions and ticket types.
+- Fix Ticket pricing not updating when changing Ticket Type.
+
 ## 3.0.0 - 2024-10-31
 > {warning} This release introduces Sessions and re-purposed Ticket Types. As such, it's a major architectural change to how you structure events, which should be largely intuitive. All your existing events and tickets will be migrated. Read through the changes [here](https://github.com/verbb/events/blob/craft-5/docs/get-started/upgrading-from-v2.md).
 
