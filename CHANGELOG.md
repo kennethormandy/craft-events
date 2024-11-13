@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.2 - 2024-11-13
+
+### Added
+- Add error handling for when being unable to check in or check out Purchased Ticket.
+- Add before/after check-in/check-out events for Purchased Tickets.
+
+### Fixed
+- Fix compatibility with `nystudio107/craft-seomatic` 5.1.6+.
+
 ## 3.0.1 - 2024-11-13
 
 ### Fixed
