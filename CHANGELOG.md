@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.7 - 2024-11-13
+
+### Fixed
+- Fix compatibility with `nystudio107/craft-seomatic` 4.1.6+.
+
 ## 2.0.6 - 2024-07-21
 
 ### Added
