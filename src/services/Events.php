@@ -30,6 +30,7 @@ class Events extends Component
                     'status' => null,
                 ],
                 'siteId' => $event->site->id,
+            }
             ]));
         }
     }

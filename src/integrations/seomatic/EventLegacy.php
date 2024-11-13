@@ -21,7 +21,7 @@ use nystudio107\seomatic\models\MetaBundle;
 use yii\base\Event as YiiEvent;
 use Exception;
 
-class Event implements SeoElementInterface
+class EventLegacy implements SeoElementInterface
 {
     // Constants
     // =========================================================================
@@ -85,7 +85,7 @@ class Event implements SeoElementInterface
         // Install only for non-console Control Panel requests
         if ($request->getIsCpRequest() && !$request->getIsConsoleRequest()) {
             // Events sidebar
-            Craft::$app->view->hook('events.edit.details', function($context) {
+            Craft::$app->view->hook('events.edit.details', function(&$context) {
                 $html = '';
 
                 Seomatic::$view->registerAssetBundle(SeomaticAsset::class);
@@ -123,7 +123,7 @@ class Event implements SeoElementInterface
             ->one();
     }
 
-    public static function previewUri(string $sourceHandle, $siteId, $typeId = null): ?string
+    public static function previewUri(string $sourceHandle, $siteId)
     {
         $uri = null;
 
@@ -139,7 +139,7 @@ class Event implements SeoElementInterface
         return $uri;
     }
 
-    public static function fieldLayouts(string $sourceHandle, $typeId = null): array
+    public static function fieldLayouts(string $sourceHandle): array
     {
         $layouts = [];
         $events = EventsPlugin::getInstance();
@@ -150,7 +150,9 @@ class Event implements SeoElementInterface
             try {
                 $eventType = $events->getEventTypes()->getEventTypeByHandle($sourceHandle);
 
-                $layoutId = $eventType?->getFieldLayoutId();
+                if ($eventType) {
+                    $layoutId = $eventType->getFieldLayoutId();
+                }
             } catch (Exception $e) {
                 $layoutId = null;
             }
@@ -173,7 +175,9 @@ class Event implements SeoElementInterface
         $eventType = null;
         $events = EventsPlugin::getInstance();
 
-        $eventType = $events?->getEventTypes()->getEventTypeById($sourceId);
+        if ($events !== null) {
+            $eventType = $events->getEventTypes()->getEventTypeById($sourceId);
+        }
 
         return $eventType;
     }
@@ -183,7 +187,9 @@ class Event implements SeoElementInterface
         $eventType = null;
         $events = EventsPlugin::getInstance();
 
-        $eventType = $events?->getEventTypes()->getEventTypeByHandle($sourceHandle);
+        if ($events !== null) {
+            $eventType = $events->getEventTypes()->getEventTypeByHandle($sourceHandle);
+        }
 
         return $eventType;
     }

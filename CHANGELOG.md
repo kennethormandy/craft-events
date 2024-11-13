@@ -44,6 +44,28 @@
 - Event element cards now show the event type and start/end date/times of events
 - Deleting a Ticket element is now prevented if any purchased tickets exist.
 
+## 2.0.7 - 2024-11-13
+
+### Fixed
+- Fix compatibility with `nystudio107/craft-seomatic` 4.1.6+.
+
+## 2.0.6 - 2024-07-21
+
+### Added
+- Add error handling for when being unable to check in or check out Purchased Ticket.
+- Add before/after check-in/check-out events for Purchased Tickets.
+
+### Changed
+- Update English translations.
+
+### Fixed
+- Fix some validation errors when saving events.
+- Fix an error when saving events where ticket SKUs were being re-generated.
+- Fix an error importing tickets with Feed Me, and only specifying defaults.
+- Fix an error when saving a new site.
+- Fix an error when creating new events for the non-default site.
+- Fix events always being re-saved when updating a site or force-applying project config.
+
 ## 2.0.5 - 2024-03-04
 
 ### Fixed
