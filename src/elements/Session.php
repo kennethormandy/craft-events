@@ -48,9 +48,19 @@ class Session extends Element implements NestedElementInterface
         return Craft::t('events', 'Session');
     }
 
+    public static function lowerDisplayName(): string
+    {
+        return Craft::t('events', 'session');
+    }
+
     public static function pluralDisplayName(): string
     {
         return Craft::t('events', 'Sessions');
+    }
+
+    public static function pluralLowerDisplayName(): string
+    {
+        return Craft::t('events', 'sessions');
     }
 
     public static function refHandle(): ?string

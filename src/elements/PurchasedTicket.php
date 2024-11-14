@@ -42,9 +42,19 @@ class PurchasedTicket extends Element
         return Craft::t('events', 'Purchased Ticket');
     }
 
+    public static function lowerDisplayName(): string
+    {
+        return Craft::t('events', 'purchased ticket');
+    }
+
     public static function pluralDisplayName(): string
     {
         return Craft::t('events', 'Purchased Tickets');
+    }
+
+    public static function pluralLowerDisplayName(): string
+    {
+        return Craft::t('events', 'purchased tickets');
     }
 
     public static function refHandle(): ?string

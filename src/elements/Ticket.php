@@ -46,9 +46,19 @@ class Ticket extends Purchasable
         return Craft::t('events', 'Ticket');
     }
 
+    public static function lowerDisplayName(): string
+    {
+        return Craft::t('events', 'ticket');
+    }
+
     public static function pluralDisplayName(): string
     {
         return Craft::t('events', 'Tickets');
+    }
+
+    public static function pluralLowerDisplayName(): string
+    {
+        return Craft::t('events', 'tickets');
     }
 
     public static function refHandle(): ?string

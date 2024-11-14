@@ -41,9 +41,19 @@ class TicketType extends Element implements NestedElementInterface
         return Craft::t('events', 'Ticket Type');
     }
 
+    public static function lowerDisplayName(): string
+    {
+        return Craft::t('events', 'ticket type');
+    }
+
     public static function pluralDisplayName(): string
     {
         return Craft::t('events', 'Ticket Types');
+    }
+
+    public static function pluralLowerDisplayName(): string
+    {
+        return Craft::t('events', 'ticket types');
     }
 
     public static function refHandle(): ?string
