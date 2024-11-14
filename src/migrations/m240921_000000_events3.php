@@ -334,11 +334,14 @@ class m240921_000000_events3 extends Migration
                 ->endDate($event['endDate'])
                 ->one() ?? new Session();
 
+            $session->setAttributes([
+                'startDate' => $event['startDate'],
+                'endDate' => $event['endDate'],
+                'allDay' => (bool)$event['allDay'],
+            ], false);
+
             // Use setters to ensure things work correctly
             $session->setPrimaryOwnerId($event['id']);
-            $session->startDate = $event['startDate'];
-            $session->endDate = $event['endDate'];
-            $session->allDay = (bool)$event['allDay'];
 
             if (!Craft::$app->getElements()->saveElement($session)) {
                 throw new Exception(Json::encode($session->getErrors()));
@@ -371,14 +374,15 @@ class m240921_000000_events3 extends Migration
 
             $ticketType = new TicketType();
 
-            // Use setters to ensure things work correctly
-            $ticketType->title = $legacyTicketTypeElement->title ?? 'Ticket Type ' . rand();
-            $ticketType->setPrimaryOwnerId($legacyTicket['eventId']);
-            $ticketType->price = $legacyTicket['price'];
-            $ticketType->capacity = $legacyTicket['quantity'];
-            $ticketType->availableFrom = $legacyTicket['availableFrom'];
-            $ticketType->availableTo = $legacyTicket['availableTo'];
+            $ticketType->setAttributes([
+                'title' => $legacyTicketTypeElement->title ?? 'Ticket Type ' . rand(),
+                'capacity' => $legacyTicket['quantity'],
+                'availableFrom' => $legacyTicket['availableFrom'],
+                'availableTo' => $legacyTicket['availableTo'],
+            ], false);
 
+            // Use setters to ensure things work correctly
+            $ticketType->setPrimaryOwnerId($legacyTicket['eventId']);
             $ticketType->setPrice($legacyTicket['price']);
 
             // Before adding content, ensure that the new ticket type has the same fields as the legacy ticket and type.
