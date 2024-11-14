@@ -40,7 +40,7 @@ class PurchasedTicketsField extends BaseNativeField
 
     protected function defaultInstructions(?ElementInterface $element = null, bool $static = false): ?string
     {
-        return Craft::t('events', 'View all the purchased tickets for this {owner}.', ['owner' => $element::lowerDisplayName()]);
+        return Craft::t('events', 'View all the purchased tickets for this element.');
     }
 
     protected function inputHtml(ElementInterface $element = null, bool $static = false): ?string
