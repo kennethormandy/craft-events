@@ -43,7 +43,7 @@ class TicketTypeSeatsPerTicketField extends BaseNativeField
         return Cp::textHtml([
             'id' => 'seatsPerTicket',
             'name' => 'seatsPerTicket',
-            'value' => $element->seatsPerTicket,
+            'value' => $element->seatsPerTicket ?: 1,
         ]);
     }
 }
