@@ -181,7 +181,7 @@ class Session extends Element implements NestedElementInterface
             'startDate' => ['label' => Craft::t('events', 'Start Date')],
             'endDate' => ['label' => Craft::t('events', 'End Date')],
             'allDay' => ['label' => Craft::t('events', 'All Day')],
-            'isRecurring' => ['label' => Craft::t('app', 'Is Occurrence?')],
+            'isRecurring' => ['label' => Craft::t('events', 'Is Occurrence?')],
         ];
     }
 

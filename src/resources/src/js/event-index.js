@@ -119,8 +119,8 @@ Craft.Events.EventIndex = Craft.BaseElementIndex.extend({
                 }
             } else {
                 this.$newEventBtn = $menuBtn = Craft.ui.createButton({
-                    label: Craft.t('app', 'New event'),
-                    ariaLabel: Craft.t('app', 'New event, choose a type'),
+                    label: Craft.t('events', 'New event'),
+                    ariaLabel: Craft.t('events', 'New event, choose a type'),
                     spinner: true,
                 })
                 .addClass('submit add icon menubtn btngroup-btn-last')

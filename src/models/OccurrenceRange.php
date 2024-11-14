@@ -142,7 +142,7 @@ class OccurrenceRange extends Model
         $html = '';
 
         $applyField = Cp::renderTemplate('_includes/forms/radioGroup.twig', [
-            'label' => Craft::t('app', 'Apply Changes To'),
+            'label' => Craft::t('events', 'Apply Changes To'),
             'id' => 'occurrence-range-type',
             'name' => 'occurrenceRange[type]',
             'value' => $this->type,
@@ -169,7 +169,7 @@ class OccurrenceRange extends Model
             Html::endTag('div');
 
         $startDateField = Cp::dateFieldHtml([
-            'label' => Craft::t('app', 'Start Date'),
+            'label' => Craft::t('events', 'Start Date'),
             'id' => 'occurrence-range-start-date',
             'name' => 'occurrenceRange[startDate]',
             'value' => $this->startDate,
@@ -180,7 +180,7 @@ class OccurrenceRange extends Model
         ]);
 
         $endDateField = Cp::dateFieldHtml([
-            'label' => Craft::t('app', 'End Date'),
+            'label' => Craft::t('events', 'End Date'),
             'id' => 'occurrence-range-end-date',
             'name' => 'occurrenceRange[endDate]',
             'value' => $this->endDate,
