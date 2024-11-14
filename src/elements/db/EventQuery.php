@@ -162,6 +162,19 @@ class EventQuery extends ElementQuery
         return parent::beforePrepare();
     }
 
+    protected function afterPrepare(): bool
+    {
+        $removeSubqueryOrderBy = ['startDate', 'endDate'];
+
+        if (is_array($this->subQuery->orderBy)) {
+            foreach ($removeSubqueryOrderBy as $column) {
+                unset($this->subQuery->orderBy[$column]);
+            }
+        }
+
+        return parent::afterPrepare();
+    }
+
     protected function statusCondition(string $status): mixed
     {
         $currentTimeDb = Db::prepareDateForDb(new DateTime());
