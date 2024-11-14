@@ -13,6 +13,7 @@ use craft\helpers\Db;
 use yii\base\InvalidArgumentException;
 use yii\base\InvalidConfigException;
 use yii\db\Connection;
+use yii\db\Expression;
 
 class SessionQuery extends ElementQuery
 {
@@ -26,6 +27,7 @@ class SessionQuery extends ElementQuery
     public mixed $startDate = null;
     public mixed $endDate = null;
     public mixed $groupUid = null;
+    public ?bool $isRecurring = null;
 
     protected array $defaultOrderBy = ['events_sessions.dateCreated' => SORT_ASC];
 
@@ -132,6 +134,12 @@ class SessionQuery extends ElementQuery
         return $this;
     }
 
+    public function isRecurring(?bool $value): static
+    {
+        $this->isRecurring = $value;
+        return $this;
+    }
+
     public function collect(?Connection $db = null): SessionCollection
     {
         return SessionCollection::make(parent::collect($db));
@@ -179,6 +187,7 @@ class SessionQuery extends ElementQuery
             'events_sessions.groupUid',
             'events_elements_sites.slug as eventSlug',
             'events_event_types.handle as eventTypeHandle',
+            'isRecurring' => new Expression('[[events_sessions]].[[groupUid]] IS NOT NULL'),
         ]);
 
         // Join in the elements_owners table
@@ -232,9 +241,26 @@ class SessionQuery extends ElementQuery
             $this->subQuery->andWhere(Db::parseParam('events_sessions.groupUid', $this->groupUid));
         }
 
+        if (isset($this->isRecurring)) {
+            $this->subQuery->andWhere(Db::parseBooleanParam('isRecurring', $this->isRecurring, false));
+        }
+
         $this->_applyHasEventParam();
 
         return true;
+    }
+
+    protected function afterPrepare(): bool
+    {
+        $removeSubqueryOrderBy = ['isRecurring'];
+
+        if (is_array($this->subQuery->orderBy)) {
+            foreach ($removeSubqueryOrderBy as $column) {
+                unset($this->subQuery->orderBy[$column]);
+            }
+        }
+
+        return parent::afterPrepare();
     }
 
     protected function cacheTags(): array

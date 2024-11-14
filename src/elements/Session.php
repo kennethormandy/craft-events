@@ -181,7 +181,7 @@ class Session extends Element implements NestedElementInterface
             'startDate' => ['label' => Craft::t('events', 'Start Date')],
             'endDate' => ['label' => Craft::t('events', 'End Date')],
             'allDay' => ['label' => Craft::t('events', 'All Day')],
-            'recurring' => ['label' => Craft::t('app', 'Is Occurrence?')],
+            'isRecurring' => ['label' => Craft::t('app', 'Is Occurrence?')],
         ];
     }
 
@@ -191,7 +191,7 @@ class Session extends Element implements NestedElementInterface
         $attributes[] = 'startDate';
         $attributes[] = 'endDate';
         $attributes[] = 'allDay';
-        $attributes[] = 'recurring';
+        $attributes[] = 'isRecurring';
 
         return $attributes;
     }
@@ -217,6 +217,7 @@ class Session extends Element implements NestedElementInterface
     public ?DateTime $endDate = null;
     public bool $allDay = false;
     public ?string $groupUid = null;
+    public bool $isRecurring = false;
     public ?int $sortOrder = null;
     public bool $deletedWithEvent = false;
 
@@ -356,7 +357,7 @@ class Session extends Element implements NestedElementInterface
 
     public function getIsRecurring(): bool
     {
-        return (bool)$this->groupUid;
+        return $this->isRecurring;
     }
 
     public function getIsAvailable(): bool
@@ -809,40 +810,6 @@ class Session extends Element implements NestedElementInterface
             $formatter = Craft::$app->getFormatter();
 
             return Html::tag('span', $formatter->asDatetime($value, Locale::LENGTH_SHORT));
-        }
-
-        if ($attribute === 'recurring') {
-            $value = $this->getIsRecurring();
-
-            if ($value) {
-                return Html::tag('span', '', [
-                    'class' => 'checkbox-icon',
-                    'role' => 'img',
-                    'title' => Craft::t('app', 'Enabled'),
-                    'aria' => [
-                        'label' => Craft::t('app', 'Enabled'),
-                    ],
-                ]);
-            } else {
-                return '';
-            }
-        }
-
-        if ($attribute === 'allDay') {
-            $value = $this->$attribute;
-
-            if ($value) {
-                return Html::tag('span', '', [
-                    'class' => 'checkbox-icon',
-                    'role' => 'img',
-                    'title' => Craft::t('app', 'Enabled'),
-                    'aria' => [
-                        'label' => Craft::t('app', 'Enabled'),
-                    ],
-                ]);
-            } else {
-                return '';
-            }
         }
 
         return parent::attributeHtml($attribute);
