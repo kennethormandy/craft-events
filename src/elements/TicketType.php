@@ -510,19 +510,19 @@ class TicketType extends Element implements NestedElementInterface
             $record->availableTo = $this->availableTo;
 
             // Use property checks, rather than PC `schemaVersion` checks for performance
-            if (property_exists($record, 'minQty')) {
+            if (array_key_exists('minQty', $record->getAttributes())) {
                 $record->minQty = $this->minQty;
             }
 
-            if (property_exists($record, 'maxQty')) {
+            if (array_key_exists('maxQty', $record->getAttributes())) {
                 $record->maxQty = $this->maxQty;
             }
 
-            if (property_exists($record, 'promotable')) {
+            if (array_key_exists('promotable', $record->getAttributes())) {
                 $record->promotable = $this->promotable;
             }
 
-            if (property_exists($record, 'seatsPerTicket')) {
+            if (array_key_exists('seatsPerTicket', $record->getAttributes())) {
                 $record->seatsPerTicket = $this->seatsPerTicket;
             }
 
