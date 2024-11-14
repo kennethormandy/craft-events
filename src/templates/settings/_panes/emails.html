@@ -19,7 +19,7 @@
                     <th>
                         <span class="status {{ email.enabled ? 'enabled' }}"></span>
 
-                        <a href="{{ url('commerce/settings/emails/' ~ email.id) }}">
+                        <a href="{{ email.cpEditUrl }}">
                             {{ email.name | t('site') }}
                         </a>
                     </th>
