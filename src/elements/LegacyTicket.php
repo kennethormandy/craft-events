@@ -3,9 +3,9 @@ namespace verbb\events\elements;
 
 use verbb\events\elements\db\LegacyTicketQuery;
 
-use craft\base\Element;
+use craft\commerce\base\Purchasable;
 
-class LegacyTicket extends Element
+class LegacyTicket extends Purchasable
 {
     // Static Methods
     // =========================================================================
