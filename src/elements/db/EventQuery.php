@@ -133,7 +133,7 @@ class EventQuery extends ElementQuery
                 'MIN(startDate) AS startDate',
                 'MAX(endDate) AS endDate',
             ])
-            ->from('{{%events_sessions}}')
+            ->from('{{%events_sessions}} events_sessions')
             ->innerJoin('{{%elements}} elements', '[[elements.id]] = [[events_sessions.id]]')
             ->where([
                 // Only count live and non-deleted session elements
