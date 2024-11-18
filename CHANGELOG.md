@@ -1,5 +1,23 @@
 # Changelog
 
+## 3.0.3 - 2024-11-19
+
+### Changed
+- Update element translations for display names.
+
+### Fixed
+- Fix an error for installs that use a database prefix.
+- Fix an error when handling order-creation with legacy ticket purchasables.
+- Fix incorrect checks for some Ticket Type properties, not saving correctly.
+- Fix default “Seats Per Ticket” value for Ticket Types.
+- Fix some translation strings.
+- Fix an error when sorting events via `startDate` or `endDate`.
+- Fix ordering by “Is Occurrence” for Sessions.
+- Fix an error when editing the settings of the Purchased Tickets field.
+- Fix “Purchased Tickets” index title not translatable.
+- Fix email link, referring to the Commerce email in the control panel.
+- Fix a migration error for sessions and ticket types.
+
 ## 3.0.2 - 2024-11-13
 
 ### Added
